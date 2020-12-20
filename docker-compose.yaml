@@ -1,0 +1,71 @@
+# For more information: https://laravel.com/docs/sail
+version: '3'
+services:
+
+  artisan:
+    build:
+      context: .
+      target: artisan
+      args:
+        APP_ENV: local
+    ports:
+      - '${PORT_PREFIX:-0}0080:80'
+    env_file:
+      - ./.env.local
+    volumes:
+      - '.:/var/www/html'
+      - '/var/www/html/vendor'
+    depends_on:
+      - npm
+      - mysql
+      - redis
+
+  npm:
+    build:
+      context: .
+      target: npm
+      args:
+        APP_ENV: local
+    env_file:
+      - ./.env.local
+    volumes:
+      - './package.json:/var/www/html/package.json'
+      - './package-lock.json:/var/www/html/package-lock.json'
+      - './webpack.mix.js:/var/www/html/webpack.mix.js'
+      - './public:/var/www/html/public'
+      - './resources:/var/www/html/resources'
+
+  mysql:
+    image: 'mysql:5.7'
+    ports:
+      - '${PORT_PREFIX:-0}3306:3306'
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      TZ: Asia/Tokyo
+    volumes:
+      - 'mysql:/var/lib/mysql'
+    command: >
+      mysqld
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --max_allowed_packet=4MB
+
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '${PORT_PREFIX:-0}6379:6379'
+    volumes:
+      - 'redis:/data'
+
+  mailhog:
+    image: 'mailhog/mailhog:latest'
+    ports:
+      - '${PORT_PREFIX:-0}1025:1025'
+      - '${PORT_PREFIX:-0}8025:8025'
+
+volumes:
+  mysql:
+    driver: local
+  redis:
+    driver: local
