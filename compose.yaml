@@ -62,6 +62,7 @@ services:
             - ${PORT_PREFIX:-0}5173:5173
         volumes:
             - ./public/:/var/www/html/public/:cached
+            - ./jsconfig.json:/var/www/html/jsconfig.json:delegated
             - ./postcss.config.js:/var/www/html/postcss.config.js:delegated
             - ./tailwind.config.js:/var/www/html/tailwind.config.js:delegated
             - ./vite.config.js:/var/www/html/vite.config.js:delegated
