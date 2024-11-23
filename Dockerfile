@@ -74,7 +74,7 @@ RUN \
     --mount=source=./package-lock.json,target=./package-lock.json \
     --mount=type=cache,target=/root/.npm/,sharing=locked \
     npm clean-install --include=dev
-COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js ./
+COPY jsconfig.json package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js ./
 COPY ./resources/ ./resources/
 RUN npm run build
 CMD ["npm", "run", "dev"]
