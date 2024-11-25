@@ -1,0 +1,13 @@
+
+.dockerignore
+.env
+.git*
+.phpunit.cache
+bootstrap/cache/*
+compose.yaml
+Dockerfile
+node_modules
+public/hot
+storage
+!storage/**/.gitignore
+vendor
