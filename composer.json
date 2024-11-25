@@ -18,6 +18,7 @@
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.2",
         "fakerphp/faker": "^1.24",
         "larastan/larastan": "^3.0",
         "laravel/breeze": "^2.2",
@@ -52,7 +53,9 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@composer update-helper",
+            "@composer update-models-helper"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -64,6 +67,13 @@
         ],
         "phpstan": [
             "./vendor/bin/phpstan"
+        ],
+        "update-helper": [
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta"
+        ],
+        "update-models-helper": [
+            "@php artisan ide-helper:models -RM"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
