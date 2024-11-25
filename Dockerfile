@@ -81,6 +81,7 @@ COPY ./resources/ ./resources/
 FROM npm AS node
 COPY --from=composer /var/www/html/vendor/tightenco/ziggy/ ./vendor/tightenco/ziggy/
 RUN npm run build
+COPY .eslintrc.json .prettierrc eslint.config.ts ./
 CMD ["npm", "run", "dev"]
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
     CMD ["curl", "-sSo", "/dev/null", "http://localhost:5173"]

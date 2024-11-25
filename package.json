@@ -6,7 +6,8 @@
         "build": "tsc && concurrently 'vite build' 'vite build --ssr'",
         "build:client": "tsc && vite build",
         "build:ssr": "tsc && vite build --ssr",
-        "dev": "vite"
+        "dev": "vite",
+        "lint": "eslint './resources/js/**/*.{ts,tsx,js,jsx}' './*.{ts,tsx,js,jsx}' --fix"
     },
     "dependencies": {
         "@headlessui/react": "^2.2.0",
@@ -17,15 +18,27 @@
         "react-dom": "^19.0.0"
     },
     "devDependencies": {
+        "@eslint/compat": "^1.2.4",
         "@tailwindcss/forms": "^0.5.10",
         "@types/node": "^22.10.6",
         "@types/react": "^19.0.6",
         "@types/react-dom": "^19.0.3",
+        "@typescript-eslint/eslint-plugin": "^8.20.0",
+        "@typescript-eslint/parser": "^8.20.0",
         "@vitejs/plugin-react-swc": "^3.7.2",
         "autoprefixer": "^10.4.20",
         "concurrently": "^9.1.2",
+        "eslint": "^9.18.0",
+        "eslint-config-prettier": "^10.0.1",
+        "eslint-plugin-prettier": "^5.2.1",
+        "eslint-plugin-react": "^7.37.4",
+        "eslint-plugin-react-hooks": "^5.1.0",
+        "globals": "^15.14.0",
         "laravel-vite-plugin": "^1.1.1",
         "postcss": "^8.5.0",
+        "prettier": "^3.4.2",
+        "prettier-plugin-organize-imports": "^4.1.0",
+        "prettier-plugin-tailwindcss": "^0.6.9",
         "tailwindcss": "^3.4.17",
         "typescript": "^5.7.3",
         "vite": "^6.0.7"
