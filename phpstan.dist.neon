@@ -7,6 +7,9 @@ parameters:
         - database/
         - routes/
 
+    scanFiles:
+        - _ide_helper_models.php
+
     # Level 10 is the highest level
     level: 7
 
@@ -14,6 +17,7 @@ parameters:
         allRules: false
 
 #    ignoreErrors:
+#        - '#PHPDoc tag @mixin contains unknown class App\\Models\\IdeHelper#'
 #        - '#PHPDoc tag @var#'
 #
 #    excludePaths:
