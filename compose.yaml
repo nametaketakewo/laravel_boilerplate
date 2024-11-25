@@ -134,6 +134,18 @@ services:
             - ${PORT_PREFIX:-0}1025:1025
             - ${PORT_PREFIX:-0}8025:8025
 
+    selenium:
+        image: selenium/standalone-chromium
+        volumes:
+            - /dev/shm/:/dev/shm/
+        healthcheck:
+            test: ["CMD", "curl", "-sf", "http://localhost:4444"]
+            interval: 60s
+            timeout: 5s
+            start_period: 30s
+            start_interval: 1s
+            retries: 1
+
 volumes:
     minio:
     pgdata:
