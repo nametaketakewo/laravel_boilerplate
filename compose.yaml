@@ -45,5 +45,29 @@ services:
             - ./public/:/var/www/html/public/:delegated
             - socket-upstream:/var/run/php/
 
+    hmr:
+        build:
+            args:
+                APP_ENV: ${APP_ENV:-local}
+                NODE_ENV: ${NODE_ENV:-development}
+                TZ: ${APP_TIMEZONE:-UTC}
+            target: node
+        develop:
+            watch:
+                - action: rebuild
+                  path: ./package-lock.json
+        environment:
+            PORT_PREFIX: ${PORT_PREFIX:-0}
+        ports:
+            - ${PORT_PREFIX:-0}5173:5173
+        volumes:
+            - ./public/:/var/www/html/public/:cached
+            - ./postcss.config.js:/var/www/html/postcss.config.js:delegated
+            - ./tailwind.config.js:/var/www/html/tailwind.config.js:delegated
+            - ./vite.config.js:/var/www/html/vite.config.js:delegated
+            - ./resources/:/var/www/html/resources/:delegated
+            - ./package.json:/var/www/html/package.json
+            - ./package-lock.json:/var/www/html/package-lock.json
+
 volumes:
     socket-upstream:
