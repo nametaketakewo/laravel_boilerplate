@@ -102,7 +102,7 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' =>  explode(',', env('DB_SEARCH_PATH', 'public')),
+            'search_path' =>  explode(',', (string)env('DB_SEARCH_PATH', 'public')),
             'sslmode' => 'prefer',
         ],
 
@@ -156,7 +156,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug((string)env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
         'default' => [
