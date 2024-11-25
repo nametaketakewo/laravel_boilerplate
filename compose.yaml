@@ -10,7 +10,7 @@ services:
             args:
                 APP_ENV: ${APP_ENV:-local}
                 NODE_ENV: ${NODE_ENV:-development}
-                TZ: ${APP_TIMEZONE:-UTC}
+                TZ: ${APP_TIMEZONE:-Asia/Tokyo}
         develop:
             watch:
                 - action: rebuild
@@ -31,7 +31,7 @@ services:
             args:
                 APP_ENV: ${APP_ENV:-local}
                 NODE_ENV: ${NODE_ENV:-development}
-                TZ: ${APP_TIMEZONE:-UTC}
+                TZ: ${APP_TIMEZONE:-Asia/Tokyo}
             target: nginx
         depends_on:
             - laravel.test
@@ -51,7 +51,7 @@ services:
             args:
                 APP_ENV: ${APP_ENV:-local}
                 NODE_ENV: ${NODE_ENV:-development}
-                TZ: ${APP_TIMEZONE:-UTC}
+                TZ: ${APP_TIMEZONE:-Asia/Tokyo}
             target: ssr
         develop:
             watch:
@@ -68,7 +68,7 @@ services:
             args:
                 APP_ENV: ${APP_ENV:-local}
                 NODE_ENV: ${NODE_ENV:-development}
-                TZ: ${APP_TIMEZONE:-UTC}
+                TZ: ${APP_TIMEZONE:-Asia/Tokyo}
             target: node
         develop:
             watch:
@@ -151,7 +151,7 @@ services:
             args:
                 APP_ENV: ${APP_ENV:-local}
                 NODE_ENV: ${NODE_ENV:-development}
-                TZ: ${APP_TIMEZONE:-UTC}
+                TZ: ${APP_TIMEZONE:-Asia/Tokyo}
             target: storybook
         develop:
             watch:

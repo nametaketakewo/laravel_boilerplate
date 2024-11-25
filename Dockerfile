@@ -4,7 +4,7 @@ ARG PHP_VERSION=8.4
 ARG NODE_VERSION=23
 ARG APP_ENV=production
 ARG NODE_ENV=production
-ARG TZ=UTC
+ARG TZ=Asia/Tokyo
 
 
 FROM php:${PHP_VERSION}-fpm AS php-base
