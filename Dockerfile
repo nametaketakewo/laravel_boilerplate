@@ -80,6 +80,19 @@ COPY package.json package-lock.json postcss.config.ts tailwind.config.ts tsconfi
 COPY ./resources/ ./resources/
 
 
+FROM npm AS storybook
+RUN \
+    --mount=type=cache,target=/var/lib/apt/,sharing=locked \
+    --mount=type=cache,target=/var/cache/apt/,sharing=locked \
+    apt update && apt install -y --no-install-recommends \
+    xdg-utils \
+    && apt -y autoremove
+COPY .storybook/ .storybook/
+CMD ["npm", "run", "storybook"]
+HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
+    CMD ["curl", "-sf", "http://localhost:6006"]
+
+
 FROM npm AS node
 COPY --from=composer /var/www/html/vendor/tightenco/ziggy/ ./vendor/tightenco/ziggy/
 RUN npm run build

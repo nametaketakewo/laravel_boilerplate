@@ -146,6 +146,33 @@ services:
             start_interval: 1s
             retries: 1
 
+    storybook:
+        build:
+            args:
+                APP_ENV: ${APP_ENV:-local}
+                NODE_ENV: ${NODE_ENV:-development}
+                TZ: ${APP_TIMEZONE:-UTC}
+            target: storybook
+        develop:
+            watch:
+                - action: rebuild
+                  path: ./package-lock.json
+        environment:
+            PORT_PREFIX: ${PORT_PREFIX:-0}
+        ports:
+            - ${PORT_PREFIX:-0}6006:${PORT_PREFIX:-0}6006
+        volumes:
+            - ./.storybook/:/var/www/html/.storybook/:delegated
+            - ./postcss.config.ts:/var/www/html/postcss.config.ts:delegated
+            - ./tailwind.config.ts:/var/www/html/tailwind.config.ts:delegated
+            - ./tsconfig.json:/var/www/html/tsconfig.json:delegated
+            - ./vite.config.ts:/var/www/html/vite.config.ts:delegated
+            - ./resources/:/var/www/html/resources/:delegated
+            - ./package.json:/var/www/html/package.json
+            - ./package-lock.json:/var/www/html/package-lock.json
+        healthcheck:
+            test: ["CMD", "curl", "-sf", "http://localhost:${PORT_PREFIX:-0}6006"]
+
 volumes:
     minio:
     pgdata:
