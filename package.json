@@ -7,6 +7,7 @@
         "build:client": "tsc && vite build",
         "build:ssr": "tsc && vite build --ssr",
         "dev": "vite",
+        "typegen": "laravel-typegen --laravel-enum --form-request",
         "lint": "eslint './resources/js/**/*.{ts,tsx,js,jsx}' './*.{ts,tsx,js,jsx}' --fix",
         "storybook": "storybook dev --ci -p $(echo $PORT_PREFIX)6006",
         "build-storybook": "storybook build"
@@ -20,6 +21,7 @@
         "react-dom": "^19.0.0"
     },
     "devDependencies": {
+        "@7nohe/laravel-typegen": "^0.6.1",
         "@chromatic-com/storybook": "^3.2.2",
         "@eslint/compat": "^1.2.4",
         "@tailwindcss/forms": "^0.5.10",
