@@ -186,6 +186,40 @@ CREATE TABLE public.sessions (
 
 
 --
+-- Name: todos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.todos (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    description text DEFAULT ''::text NOT NULL,
+    is_done boolean DEFAULT false NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+--
+-- Name: todos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.todos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: todos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.todos_id_seq OWNED BY public.todos.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -239,6 +273,13 @@ ALTER TABLE ONLY public.jobs ALTER COLUMN id SET DEFAULT nextval('public.jobs_id
 --
 
 ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
+
+
+--
+-- Name: todos id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.todos ALTER COLUMN id SET DEFAULT nextval('public.todos_id_seq'::regclass);
 
 
 --
@@ -321,6 +362,14 @@ ALTER TABLE ONLY public.sessions
 
 
 --
+-- Name: todos todos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.todos
+    ADD CONSTRAINT todos_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_email_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -388,6 +437,7 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 1	0001_01_01_000000_create_users_table	1
 2	0001_01_01_000001_create_cache_table	1
 3	0001_01_01_000002_create_jobs_table	1
+4	2024_11_28_031056_create_todos_table	2
 \.
 
 
@@ -395,7 +445,7 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 3, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 4, true);
 
 
 --
