@@ -81,10 +81,10 @@ services:
         volumes:
             - ./bootstrap/ssr/:/var/www/html/bootstrap/ssr/:cached
             - ./public/:/var/www/html/public/:cached
-            - ./jsconfig.json:/var/www/html/jsconfig.json:delegated
-            - ./postcss.config.js:/var/www/html/postcss.config.js:delegated
-            - ./tailwind.config.js:/var/www/html/tailwind.config.js:delegated
-            - ./vite.config.js:/var/www/html/vite.config.js:delegated
+            - ./postcss.config.ts:/var/www/html/postcss.config.ts:delegated
+            - ./tailwind.config.ts:/var/www/html/tailwind.config.ts:delegated
+            - ./tsconfig.json:/var/www/html/tsconfig.json:delegated
+            - ./vite.config.ts:/var/www/html/vite.config.ts:delegated
             - ./resources/:/var/www/html/resources/:delegated
             - ./package.json:/var/www/html/package.json
             - ./package-lock.json:/var/www/html/package-lock.json
