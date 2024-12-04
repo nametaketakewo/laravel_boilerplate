@@ -7,6 +7,7 @@
 bootstrap/cache/*
 compose.yaml
 Dockerfile
+docker/pgsql
 node_modules
 public/hot
 storage

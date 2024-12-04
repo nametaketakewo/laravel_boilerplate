@@ -15,7 +15,7 @@ else
     else
         DOCKER_COMPOSE=(docker-compose)
     fi
-    "${DOCKER_COMPOSE[@]}" up laravel.test -d
+    "${DOCKER_COMPOSE[@]}" up laravel.test db -d
     "${DOCKER_COMPOSE[@]}" exec laravel.test ./docker/setup.sh
     "${DOCKER_COMPOSE[@]}" down --remove-orphans
 fi
