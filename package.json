@@ -3,9 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "concurrently 'vite build' 'vite build --ssr'",
-        "build:client": "vite build",
-        "build:ssr": "vite build --ssr",
+        "build": "tsc && concurrently 'vite build' 'vite build --ssr'",
+        "build:client": "tsc && vite build",
+        "build:ssr": "tsc && vite build --ssr",
         "dev": "vite"
     },
     "dependencies": {
@@ -18,12 +18,16 @@
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.10",
+        "@types/node": "^22.10.6",
+        "@types/react": "^19.0.6",
+        "@types/react-dom": "^19.0.3",
         "@vitejs/plugin-react-swc": "^3.7.2",
         "autoprefixer": "^10.4.20",
         "concurrently": "^9.1.2",
         "laravel-vite-plugin": "^1.1.1",
         "postcss": "^8.5.0",
         "tailwindcss": "^3.4.17",
+        "typescript": "^5.7.3",
         "vite": "^6.0.7"
     }
 }
