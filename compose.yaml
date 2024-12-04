@@ -109,6 +109,26 @@ services:
             start_interval: 1s
             retries: 1
 
+    minio:
+        command: minio server /data/ --console-address ":9001"
+        environment:
+            MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-minio}
+            MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY:-password}
+        image: minio/minio
+        ports:
+            - ${PORT_PREFIX:-0}9000:9000
+            - ${PORT_PREFIX:-0}9001:9001
+        volumes:
+            - minio:/data/
+        healthcheck:
+            test: ["CMD", "mc", "ready", "local"]
+            interval: 60s
+            timeout: 5s
+            start_period: 30s
+            start_interval: 1s
+            retries: 1
+
 volumes:
+    minio:
     pgdata:
     socket-upstream:
