@@ -22,10 +22,12 @@ RUN \
     libpq-dev \
     libzip-dev \
     lsof \
+    postgresql-client \
     && apt -y autoremove
 RUN \
     --mount=type=cache,target=/tmp/pear/,sharing=locked \
     docker-php-ext-install \
+    pdo_pgsql \
     zip \
     && docker-php-ext-enable \
     opcache \

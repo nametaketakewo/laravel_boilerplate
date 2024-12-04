@@ -3,6 +3,8 @@
 services:
     laravel.test:
         build: .
+        depends_on:
+            - db
         environment:
             APP_KEY: ${APP_KEY:?err}
             APP_NAME: ${APP_NAME:-Laravel}
@@ -20,6 +22,12 @@ services:
             MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-null}
             MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-"hello@example.com"}
             MAIL_FROM_NAME: ${MAIL_FROM_NAME:-"${APP_NAME}"}
+            DB_CONNECTION: ${DB_CONNECTION:-pgsql}
+            DB_HOST: ${DB_HOST:-db}
+            DB_PORT: ${DB_PORT:-5432}
+            DB_DATABASE: ${DB_DATABASE:-postgres}
+            DB_USERNAME: ${DB_USERNAME:-postgres}
+            DB_PASSWORD: ${DB_PASSWORD:-password}
         volumes:
             - socket-upstream:/var/run/php/
 
@@ -39,5 +47,24 @@ services:
         depends_on:
             - laravel.test
 
+    db:
+        environment:
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+            POSTGRES_USER: ${DB_USERNAME:-postgres}
+            POSTGRES_DB: ${DB_DATABASE:-postgres}
+        image: postgres:16.4
+        ports:
+            - ${PORT_PREFIX:-0}5432:5432
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE:-postgres}", "-U", "${DB_USERNAME:-postgres}"]
+            interval: 60s
+            timeout: 5s
+            start_period: 30s
+            start_interval: 1s
+            retries: 1
+
 volumes:
+    pgdata:
     socket-upstream:

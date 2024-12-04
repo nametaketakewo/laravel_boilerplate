@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -85,15 +85,24 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'laravel'),
-            'username' => env('DB_USERNAME', 'root'),
+//            'host' => env('DB_HOST', '127.0.0.1'),
+//            'port' => env('DB_PORT', '5432'),
+            'read' => [
+                'host' => env('DB_READ_HOST', env('DB_HOST', '127.0.0.1')),
+                'port' => env('DB_READ_PORT', env('DB_PORT', '5432')),
+            ],
+            'write' => [
+                'host' => env('DB_WRITE_HOST', env('DB_HOST', '127.0.0.1')),
+                'port' => env('DB_WRITE_PORT', env('DB_PORT', '5432')),
+            ],
+            'sticky' => env('DB_STICKY', true),
+            'database' => env('DB_DATABASE', 'postgres'),
+            'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            'search_path' =>  explode(',', env('DB_SEARCH_PATH', 'public')),
             'sslmode' => 'prefer',
         ],
 
