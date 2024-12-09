@@ -68,7 +68,7 @@ RUN \
     && if [ "${APP_ENV}" = "production" ];then ./artisan optimize && ./artisan config:clear;fi
 
 
-FROM node-base AS node
+FROM node-base AS npm
 RUN \
     --mount=source=./package.json,target=./package.json \
     --mount=source=./package-lock.json,target=./package-lock.json \
@@ -76,10 +76,28 @@ RUN \
     npm clean-install --include=dev
 COPY jsconfig.json package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js ./
 COPY ./resources/ ./resources/
+
+
+FROM npm AS node
+COPY --from=composer /var/www/html/vendor/tightenco/ziggy/ ./vendor/tightenco/ziggy/
 RUN npm run build
 CMD ["npm", "run", "dev"]
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
     CMD ["curl", "-sSo", "/dev/null", "http://localhost:5173"]
+
+
+FROM node-base AS ssr
+RUN \
+    --mount=source=package.json,target=package.json \
+    --mount=source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm/,sharing=locked \
+    npm clean-install --omit=dev
+COPY --from=node /var/www/html/bootstrap/ssr/ ./bootstrap/ssr/
+ENTRYPOINT ["/usr/local/bin/node"]
+CMD ["bootstrap/ssr/ssr.js"]
+HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
+    CMD ["curl", "-sf", "http://localhost:13714"]
+EXPOSE 13714
 
 
 FROM nginx AS nginx
@@ -132,12 +150,13 @@ COPY . .
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 RUN \
-    --mount=from=node,source=/var/www/html/node_modules,target=/tmp/node_modules \
+    --mount=from=npm,source=/var/www/html/node_modules,target=/tmp/node_modules \
     if [ "${APP_ENV}" = "local" ];then cp -r /tmp/node_modules/ ./ ;fi
 COPY --from=composer /var/www/html/vendor/ ./vendor/
 COPY --from=composer --chmod=777 /var/www/html/bootstrap/ ./bootstrap/
 COPY --from=composer --chmod=777 /var/www/html/storage/ ./storage/
 COPY --from=node /var/www/html/public/build/ ./public/build/
+COPY --from=node /var/www/html/bootstrap/ssr/ ./bootstrap/ssr/
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
     CMD ["lsof", "/var/run/php/php-fpm.sock"]
 VOLUME /var/run/php/

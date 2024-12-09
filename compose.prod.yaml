@@ -7,6 +7,7 @@ services:
             APP_KEY: ${APP_KEY:?err}
             APP_NAME: ${APP_NAME:-Laravel}
             APP_URL: ${APP_URL:-http://localhost:${PORT_PREFIX:-0}0080}
+            INERTIA_SSR_URL: ${INERTIA_SSR_URL:-http://ssr:13714}
             LOG_STACK: ${LOG_STACK:-stderr}
             LOG_LEVEL: ${LOG_LEVEL:-error}
             LARAVEL_STORAGE_PATH: ${LARAVEL_STORAGE_PATH:-/tmp/storage}
@@ -31,6 +32,12 @@ services:
             - ${PORT_PREFIX:-0}0080:80
         volumes:
             - socket-upstream:/var/run/php/
+
+    ssr:
+        build:
+            target: ssr
+        depends_on:
+            - laravel.test
 
 volumes:
     socket-upstream:

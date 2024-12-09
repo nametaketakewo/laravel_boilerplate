@@ -19,6 +19,7 @@ services:
                   path: ./package-lock.json
         environment:
             APP_URL: ${APP_URL:-http://localhost:${PORT_PREFIX:-0}0080}
+            INERTIA_SSR_URL: ${INERTIA_SSR_URL:-http://ssr:13714}
         ports:
             - ${PORT_PREFIX:-0}8000:8000
         volumes:
@@ -45,6 +46,23 @@ services:
             - ./public/:/var/www/html/public/:delegated
             - socket-upstream:/var/run/php/
 
+    ssr:
+        build:
+            args:
+                APP_ENV: ${APP_ENV:-local}
+                NODE_ENV: ${NODE_ENV:-development}
+                TZ: ${APP_TIMEZONE:-UTC}
+            target: ssr
+        develop:
+            watch:
+                - action: sync+restart
+                  path: ./bootstrap/ssr/
+                  target: /var/www/html/bootstrap/ssr/
+                - action: rebuild
+                  path: ./resources/
+                - action: rebuild
+                  path: ./package-lock.json
+
     hmr:
         build:
             args:
@@ -61,6 +79,7 @@ services:
         ports:
             - ${PORT_PREFIX:-0}5173:5173
         volumes:
+            - ./bootstrap/ssr/:/var/www/html/bootstrap/ssr/:cached
             - ./public/:/var/www/html/public/:cached
             - ./jsconfig.json:/var/www/html/jsconfig.json:delegated
             - ./postcss.config.js:/var/www/html/postcss.config.js:delegated
