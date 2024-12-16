@@ -7,7 +7,8 @@ ARG NODE_ENV=production
 ARG TZ=Asia/Tokyo
 
 
-FROM php:${PHP_VERSION}-fpm AS php-base
+FROM unit:php${PHP_VERSION} AS php-base
+WORKDIR /var/www/html/
 ARG TZ
 RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
 RUN ln -snf "${PHP_INI_DIR}/php.ini-production" "${PHP_INI_DIR}/php.ini"
@@ -126,7 +127,7 @@ COPY --from=node /var/www/html/public/build/ ./public/build/
 ENV NGINX_ENTRYPOINT_QUIET_LOGS=1
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
     CMD ["curl", "-sf", "http://localhost/up"]
-VOLUME /var/run/php/
+VOLUME /var/run/unit/
 EXPOSE 80
 
 
@@ -161,7 +162,7 @@ RUN \
         cp /tmp/zz-php-development.ini /usr/local/etc/php/conf.d/zz-php-development.ini \
     ;fi
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/
-COPY ./docker/php/zz-docker.conf /usr/local/etc/php-fpm.d/
+COPY ./docker/unit/config.json /docker-entrypoint.d/config.json
 COPY . .
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
@@ -174,6 +175,6 @@ COPY --from=composer --chmod=777 /var/www/html/storage/ ./storage/
 COPY --from=node /var/www/html/public/build/ ./public/build/
 COPY --from=node /var/www/html/bootstrap/ssr/ ./bootstrap/ssr/
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
-    CMD ["lsof", "/var/run/php/php-fpm.sock"]
-VOLUME /var/run/php/
+    CMD ["curl", "-sf", "http://localhost/up"]
+VOLUME /var/run/unit/
 EXPOSE 8000
