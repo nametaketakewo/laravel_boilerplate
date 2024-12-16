@@ -24,7 +24,7 @@ services:
             - ${PORT_PREFIX:-0}8000:8000
         volumes:
             - ./:/var/www/html/
-            - socket-upstream:/var/run/php/
+            - socket-upstream:/var/run/unit/
 
     web:
         build:
@@ -44,7 +44,7 @@ services:
             - ${PORT_PREFIX:-0}0080:80
         volumes:
             - ./public/:/var/www/html/public/:delegated
-            - socket-upstream:/var/run/php/
+            - socket-upstream:/var/run/unit/
 
     ssr:
         build:
