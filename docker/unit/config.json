@@ -1,0 +1,42 @@
+{
+    "listeners": {
+        "unix:/var/run/unit/unit.sock": {
+            "pass": "applications/laravel",
+            "forwarded": {
+                "client_ip": "X-Forwarded-For",
+                "source": [
+                    "unix"
+                ]
+            }
+        },
+        "*:8000": {
+            "pass": "applications/laravel",
+            "forwarded": {
+                "client_ip": "X-Forwarded-For",
+                "source": [
+                    "192.168.0.0/8"
+                ]
+            }
+        }
+    },
+    "applications": {
+        "laravel": {
+            "type": "php",
+            "root": "/var/www/html/public/",
+            "script": "index.php",
+            "limits": {
+                "requests": 100
+            },
+            "processes": {
+                "max": 10,
+                "spare": 5
+            }
+        }
+    },
+    "settings": {
+        "http": {
+            "server_version": false
+        }
+    },
+    "access_log": "/dev/stdout"
+}
