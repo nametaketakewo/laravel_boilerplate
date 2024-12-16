@@ -38,19 +38,7 @@ services:
             AWS_URL: ${AWS_URL:-http://localhost:${PORT_PREFIX:-0}9000/local}
             AWS_USE_PATH_STYLE_ENDPOINT: ${AWS_USE_PATH_STYLE_ENDPOINT:-true}
         ports:
-            - ${PORT_PREFIX:-0}8000:8000
-        volumes:
-            - socket-upstream:/var/run/unit/
-
-    web:
-        build:
-            target: nginx
-        depends_on:
-            - laravel.test
-        ports:
             - ${PORT_PREFIX:-0}0080:80
-        volumes:
-            - socket-upstream:/var/run/unit/
 
     ssr:
         build:
@@ -98,4 +86,3 @@ services:
 volumes:
     minio:
     pgdata:
-    socket-upstream:
