@@ -117,20 +117,6 @@ HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s -
 EXPOSE 13714
 
 
-FROM nginx AS nginx
-WORKDIR /var/www/html/
-ARG TZ
-RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/
-COPY ./public/ ./public/
-COPY --from=node /var/www/html/public/build/ ./public/build/
-ENV NGINX_ENTRYPOINT_QUIET_LOGS=1
-HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
-    CMD ["curl", "-sf", "http://localhost/up"]
-VOLUME /var/run/unit/
-EXPOSE 80
-
-
 FROM php-base
 RUN if [ "${APP_ENV}" = "local" ];then ln -snf /var/www/html /opt/project ;fi
 RUN \
@@ -176,5 +162,4 @@ COPY --from=node /var/www/html/public/build/ ./public/build/
 COPY --from=node /var/www/html/bootstrap/ssr/ ./bootstrap/ssr/
 HEALTHCHECK --interval=60s --timeout=5s --start-period=30s --start-interval=1s --retries=1 \
     CMD ["curl", "-sf", "http://localhost/up"]
-VOLUME /var/run/unit/
-EXPOSE 8000
+EXPOSE 80
