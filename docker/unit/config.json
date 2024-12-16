@@ -1,24 +1,42 @@
 {
     "listeners": {
-        "unix:/var/run/unit/unit.sock": {
-            "pass": "applications/laravel",
-            "forwarded": {
-                "client_ip": "X-Forwarded-For",
-                "source": [
-                    "unix"
-                ]
-            }
-        },
-        "*:8000": {
-            "pass": "applications/laravel",
-            "forwarded": {
-                "client_ip": "X-Forwarded-For",
-                "source": [
-                    "192.168.0.0/8"
-                ]
-            }
+        "*:80": {
+            "pass": "routes"
         }
     },
+    "routes": [
+        {
+            "match": {
+                "uri": "~/\\.(?!well-known).*"
+            },
+            "action": {
+                "return": 404
+            }
+        },
+        {
+            "match": {
+                "uri": "!/index.php"
+            },
+            "action": {
+                "share": "/var/www/html/public$uri",
+                "fallback": {
+                    "pass": "applications/laravel",
+                    "response_headers": {
+                        "X-Frame-Options": "SAMEORIGIN",
+                        "X-Content-Type-Options": "nosniff",
+                        "X-XSS-Protection": "1; mode=block",
+                        "X-Powered-By": null
+                    }
+                },
+                "response_headers": {
+                    "X-Frame-Options": "SAMEORIGIN",
+                    "X-Content-Type-Options": "nosniff",
+                    "X-XSS-Protection": "1; mode=block",
+                    "Content-Type": "${response_header_content_type}; charset=utf-8"
+                }
+            }
+        }
+    ],
     "applications": {
         "laravel": {
             "type": "php",
@@ -38,5 +56,8 @@
             "server_version": false
         }
     },
-    "access_log": "/dev/stdout"
+    "access_log": {
+        "if": "`${/^\\/(favicon.ico|robots.txt)\\/?$/.test(uri) || uri == '/up' && /^curl/.test(vars.header_user_agent) ? false : true}`",
+        "path": "/dev/stdout"
+    }
 }
