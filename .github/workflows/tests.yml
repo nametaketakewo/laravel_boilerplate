@@ -13,7 +13,6 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-    environment: Testing
 
     steps:
       - name: Checkout
@@ -33,7 +32,10 @@ jobs:
           cache: 'npm'
 
       - name: Install Node Dependencies
-        run: npm i
+        run: npm ci
+
+      - name: Build Assets
+        run: npm run build
 
       - name: Create SQLite Database
         run: touch database/database.sqlite
@@ -47,8 +49,5 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Build Assets
-        run: npm run build
-
-      - name: Run Tests
+      - name: Tests
         run: ./vendor/bin/pest
